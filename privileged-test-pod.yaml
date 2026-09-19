@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: privileged-test
+  namespace: kafka
+spec:
+  containers:
+    - name: privileged-test
+      image: nginx
+      securityContext:
+        privileged: true

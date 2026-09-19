@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: irsa-test-pod
+  namespace: default
+spec:
+  serviceAccountName: irsa-demo-sa
+  containers:
+    - name: aws-cli
+      image: amazon/aws-cli:latest
+      command: ["sleep", "3600"]
