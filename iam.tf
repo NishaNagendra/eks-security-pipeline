@@ -80,3 +80,35 @@ resource "aws_iam_role_policy" "irsa_demo_s3_readonly" {
     }]
   })
 }
+
+resource "aws_iam_role" "lambda_remediation" {
+  name = "lambda-remediation-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "lambda.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
+  role       = aws_iam_role.lambda_remediation.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+resource "aws_iam_role_policy" "lambda_eks_access" {
+  name = "eks-describe-and_auth"
+  role = aws_iam_role.lambda_remediation.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["eks:DescribeCluster"]
+      Resource = aws_eks_cluster.main.arn
+    }]
+  })
+}

@@ -2,3 +2,7 @@
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
+
+package/
+lambda_remediation.zip
+response.json

@@ -3,6 +3,11 @@ resource "aws_eks_cluster" "main" {
   role_arn = aws_iam_role.eks_cluster.arn
   version  = "1.31"
 
+  access_config {
+    authentication_mode                         = "API_AND_CONFIG_MAP"
+    bootstrap_cluster_creator_admin_permissions = true
+  }
+
   vpc_config {
     subnet_ids              = concat(aws_subnet.private[*].id, aws_subnet.public[*].id)
     endpoint_private_access  = true
@@ -40,4 +45,11 @@ resource "aws_eks_node_group" "main" {
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.eks_ecr_policy,
   ]
+}
+
+
+resource "aws_eks_access_entry" "lambda_remediation" {
+  cluster_name      = aws_eks_cluster.main.name
+  principal_arn     = aws_iam_role.lambda_remediation.arn
+  kubernetes_groups = ["lambda-remediation-group"]
 }

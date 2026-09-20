@@ -1,0 +1,18 @@
+{
+  "detail-type": "GuardDuty Finding",
+  "source": "aws.guardduty",
+  "region": "us-east-1",
+  "detail": {
+    "type": "PrivilegeEscalation:Kubernetes/AnomalousBehavior.RoleBindingCreated",
+    "resource": {
+      "eksClusterDetails": {
+        "name": "security-pipeline-cluster"
+      },
+      "kubernetesDetails": {
+        "kubernetesUserDetails": {
+          "username": "privesc-exploit"
+        }
+      }
+    }
+  }
+}
